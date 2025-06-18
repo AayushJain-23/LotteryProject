@@ -34,7 +34,7 @@ contract Lottery{
         return uint(keccak256(abi.encodePacked(block.timestamp,block.difficulty,participants.length)));
     }
 
-    function selectWinner() public {
+    function selectWinner() public  {
         require(msg.sender==manager);
         require(participants.length>=3);
 
@@ -51,14 +51,24 @@ contract Lottery{
    
         winner=participants[index];
             // 'participants' is a dynamic array that stores the addresses of the lottery participants.
-            // now we are having the index of the winner 
+            // now we are having the index of the winner, we will pass it to participants array,
+            // according to index number, the address of the winner will be stored into "winner"
+
+
+                                                 //"return winner;" 
+         winner.transfer(getBalance());
+            // tranfer all the ethers which these contract( getBalance() ) has to the 'winner' of the lottery.
+
+        // This is the resetting line 
+        // reset dynamic array 
+        participants=new address payable [](0);    
 
 
 
 
 
 
-        winner.transfer(this.getBalance());
+        
 
     }
 }
