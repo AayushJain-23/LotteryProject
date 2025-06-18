@@ -22,21 +22,43 @@ contract Lottery{
                 //this will be PUSH the addresses of ether senders to the "participants" dynamic array.
         }
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    function getBalance() public view returns(uint)
+        function getBalance() public view returns(uint)
+        {
+            require(msg.sender== manager);
+            return address(this).balance;
+        }
+
+    function random() public view returns(uint)
     {
-        require(msg.sender== manager);
-        return address(this).balance;
+        //creating a random function using "keccak256" 
+        return uint(keccak256(abi.encodePacked(block.timestamp,block.difficulty,participants.length)));
     }
 
+    function selectWinner() public {
+        require(msg.sender==manager);
+        require(participants.length>=3);
+
+        uint r = random();
+
+        address payable winner;
+
+        uint index = r % participants.length;
+            // "index" will be storing the index number of the WINNER from the dynamic array 
+            // 'r' is the random number generated from the 'random' function,
+            //then stored in 'r' which is module with length of the array which should be 3 or more than 3, 
+            //we will get the "index" of the winner using this.
+        //----------------------------------------------------------------//
+   
+        winner=participants[index];
+            // 'participants' is a dynamic array that stores the addresses of the lottery participants.
+            // now we are having the index of the winner 
+
+
+
+
+
+
+        winner.transfer(this.getBalance());
+
+    }
 }
